@@ -1,0 +1,186 @@
+{% extends 'mainfiles/base.html' %}
+{% load static %}
+{% block content %}
+<!--<div class="container">
+    <h1>Transportation Selection</h1>
+    <form method="post">
+        {% csrf_token %}
+        <p>Select your transportation option:</p>
+        <input type="radio" name="transportation_choice" value="pickup"> Pick-up (Price: ksh 350)
+        <input type="radio" name="transportation_choice" value="lorry"> Lorry (Price: ksh600)
+        <input type="submit" value="Submit">
+    </form>
+</div>-->
+
+<div>
+    <form method="post">
+        {% csrf_token %}
+      
+        <div> 
+            <div class="form-field">
+                <label for="school">School:</label>
+                <select required class="form-control" id="school" name="school">
+                    <option value="" selected disabled>Select a School</option>
+                    {% for school in schools_list %}
+                        <option value="{{ school }}">{{ school }}</option>
+                    {% endfor %}
+                </select>
+               
+            </div>  
+           
+            <div>
+              <label for="subcounty">Select Subcounty:</label>
+              <select name="subcounty" id="subcounty">
+                <!-- Add options for subcounties here -->
+                <!-- Example: -->
+                  <option value="" selected disabled>Select a Subcounty</option>
+                  <option value="Mvita">Mvita</option>
+                  <option value="Nyali">Nyali</option>
+                  <option value="Changamwe">Changamwe</option>
+                  <option value="Likoni">Likoni</option>
+                  <option value="Kisauni">Kisauni</option>
+                  <option value="Jomvu">Jomvu</option>
+                <!-- Add other subcounties as needed -->
+              </select>
+            </div>  
+          <!--  <input type="submit" value="View Rates"> -->
+           
+            <button type="submit" >Submit</button>
+           
+        </div>  
+        {% if selected_subcounty %}
+           {% if rates %}
+               <h2>Rates for {{ selected_subcounty }}:</h2>
+               <ul>
+                   {% for key, value in rates.items %}
+                       <li>
+                           <input type="radio" id="{{ key }}" name="selected_rate" value="{{ key }}" {% if selected_rate == key %}checked{% endif %}>
+                           <label for="{{ key }}">{{ key }}: {{ value }}</label>
+                       </li>
+                   {% endfor %}
+               </ul>
+           {% else %}
+             <p>No rates found for {{ selected_subcounty }}</p>
+          {% endif %}
+       {% endif %}
+     
+    </form>
+    
+    {% if selected_subcounty %}
+        {% if rates %}
+            <h2>Rates for {{ selected_subcounty }}:</h2>
+            <ul>
+                {% for key, value in rates.items %}
+                    <li>
+                        <input type="radio" id="{{ key }}" name="selected_rate" value="{{ key }}" {% if selected_rate == key %}checked{% endif %}>
+                        <label for="{{ key }}">{{ key }}: {{ value }}</label>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No rates found for {{ selected_subcounty }}</p>
+        {% endif %}
+    {% endif %}
+    
+</div>
+
+<!--<div>
+    <h2>Choose Your Subcounty</h2>
+    <form method="post" action="">  
+        {% csrf_token %}
+        <div class="form-field">
+            <label for="school">School:</label>
+            <select required class="form-control" id="school" name="school">
+                <option value="" selected disabled>Select a School</option>
+                {% for school in schools_list %}
+                    <option value="{{ school }}">{{ school }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <label for="subcounty">Select a Subcounty:</label>
+        <select name="subcounty" id="subcounty">
+            <option value="" selected disabled>Select your Subcounty</option>
+            {% for subcounty in subcounties %}
+                <option value="{{ subcounty }}">{{ subcounty }}</option>
+            {% endfor %}
+        </select>
+
+        <input type="submit" value="View Rates">
+    </form>     -->
+        
+
+
+<!--<script>
+ $(document).ready(function() {
+    $('#subcounty').change(function() {
+        var selectedSubcounty = $(this).val();
+
+        $.ajax({
+            url: '/get_rates/',
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'X-Requested-With': 'XMLHttpRequest' // Set the X-Requested-With header
+            },
+            contentType: 'application/json',
+            data: JSON.stringify({'selected_subcounty': selectedSubcounty}),
+            success: function(data) {
+                var ratesContainer = $('#rates-container');
+                ratesContainer.empty(); // Clear previous data
+                
+                $.each(data, function(vehicleType, rate) {
+                    var rateElement = $('<p>').text(vehicleType + ': ' + rate);
+                    ratesContainer.append(rateElement);
+                });
+            },
+            error: function(error) {
+                console.error('Error:', error);
+            }
+        });
+    });
+});
+
+</script> -->
+
+
+ <!--<script>
+    document.getElementById('subcounty').addEventListener('change', function() {
+        var selectedSubcounty = this.value;
+
+        fetch('/get_rates/', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({'selected_subcounty': selectedSubcounty})
+        })
+        .then(response => response.json())
+        .then(data => {
+            var ratesContainer = document.getElementById('rates-container');
+            ratesContainer.innerHTML = ''; // Clear previous data
+            
+            for (var vehicleType in data) {
+                var rate = data[vehicleType];
+                var rateElement = document.createElement('p');
+                rateElement.textContent = vehicleType + ': ' + rate;
+                ratesContainer.appendChild(rateElement);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    });
+</script> -->
+
+
+
+<script>
+    function submitSchool() {
+        var selectedSchool = document.getElementById('school').value;
+        document.getElementById('selectedSchool').value = selectedSchool;
+        document.getElementById('schoolForm').submit();
+    }
+</script>
+
+<script src="{% static 'js/script.js' %}"></script>
+{% endblock %}

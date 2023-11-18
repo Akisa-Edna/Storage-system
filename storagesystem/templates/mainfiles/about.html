@@ -1,0 +1,37 @@
+{% extends 'mainfiles/base.html' %}
+{% load static %}
+{% block content %}
+
+<h3>Welcome to storage facility </h3>
+<p>Here we help students to store there luggage with highend security enclosed containers.We offer both private container units and shared container units.For the private units,you have complete control over the lock on your storage unit.  
+while for the shared units, the keys are kept at the facility but you can access them at any day of choice as long as it is within the normal working hours. 
+Access to the compound is only possible within stated working hours and only by registered and identified people associated with your unit.  
+The sign in procedure & access to storage units is supervised by the facility security personnel and recorded on the CCTV system.</p>
+<div class="container">
+   <div class="row">
+       <div class="col-md-6 col-sm-12">
+        <h4>private unit</h4>
+          <img src="{% static 'images/privateunit.jpg' %}" width="550" height="500">
+       </div>
+       <div class="col-md-6 col-sm-12">
+        <h4>shared unit</h4>
+        <img src="{%static 'images/sharedunit.jpg' %}">
+       </div>
+   </div>
+</div>   
+
+<h3> Luggage collection</h3>
+<p>We have a luggage collection which is offered at a fee if you need your luggage to be collected from your designation.For transportation we use lorry or truck depending on the amount of goods you have.For the lorry we charge ksh 600 while pickup is charged 350.</p>
+  <div class="row">
+    <div class="col-md-6 col-sm-12">
+        <h4><strong>lorry-ksh600</strong></h4>
+     <img src="{%static 'images/lorry.jpg' %}" width="550" height="500">
+    </div>
+    <div class="col-md-6 col-sm-12">
+        <h4><strong>pickup-ksh350</strong></h4>
+     <img src="{%static 'images/pickup.jpg' %}" width="550" height="500">
+    </div>
+  </div>
+
+
+{% endblock %}

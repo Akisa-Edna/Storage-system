@@ -1,0 +1,11 @@
+{%extends 'mainfiles/base.html'%} 
+{% load static %}
+{%block content%}
+<div class="container">
+<h1>SignUp from here</h1>
+
+<button type=""class="btn btn-danger"><a href="{%url 'storageProvider_signup'%}">StorageProvider SignUp</a></button>
+
+<button type="" class="btn btn-secondary"><a href="{%url 'student_signup'%}">Student SignUp</a></button>
+</div>
+{%endblock%}

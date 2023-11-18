@@ -1,0 +1,48 @@
+{% extends 'mainfiles/base.html' %}
+{% load static %}
+{% block content %}
+
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        <strong>Message:</strong> {{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="close"></button>
+        <span aria-hidden="true">&times;</span>
+    </div>
+    {% endfor %}
+
+    <div class="container-fluid">
+       <div class="row justify-content-center">
+          <div class="col-12 col-sm-6 col-md-3">
+               <form action="/signin", method="post" class="form-container">
+                  {% csrf_token %}
+
+                  <h3 class="text-center font-weight-bold">Sign In</h3>
+                  <div class="form-group">
+                    <label for="">Email</label>
+                    <input type="text" id="email" name="email" placeholder="Enter your email " Required> 
+                  </div>
+                  <br/>
+  
+                  <div class="form-group">
+                    <label for="">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Enter your password " Required>
+                  </div>
+                  <br/> 
+  
+                  <div>
+                      <a href="reset_password/">forgot your password?click here!</a>
+                  </div>
+                  <br/>
+  
+                  <button type="submit" >sign In</button>
+  
+                  <div>
+                      <p>Don't have an account?<a href="signup">signup</a></p>
+                  </div>
+               </form>
+           </div>
+      </div>
+   </div>
+{% endblock %}
+
+

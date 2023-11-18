@@ -1,0 +1,38 @@
+{%extends 'mainfiles/base.html' %}
+
+<form method="GET">
+    
+    {{ form.as_p }}
+    <input type="submit" value="Search">
+</form>
+
+<ul>
+    {% for booking in results %}
+        <li>{{ booking.name }}</li>
+        <li>{{ booking.price }}</li>
+        <li>{{ booking.date_booked }}</li>
+        <li>{{ booking.transportaion_choice }}</li>
+        <li>{{ booking.school }}</li>
+        <!-- Include other booking fields as needed -->
+    {% empty %}
+        <li>No results found.</li>
+    {% endfor %}
+</ul>
+<!--
+< Template for Container search results 
+<form method="GET">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Search">
+</form>
+
+<ul>
+    {% for container in results %}
+        <li>{{ container.name }}</li>
+        <!-- Include other container fields as needed 
+    {% empty %}
+        <li>No results found.</li>
+    {% endfor %}
+</ul>
+-->
+

@@ -1,0 +1,47 @@
+{% extends "mainfiles/base.html" %}
+
+{% block content %}
+  <h1>containers</h1>
+
+  <table>
+    <form method="post" action="{% url 'index' %}">
+       <thead>
+          <tr>
+             <th>Category</th>
+             <th>Name</th>
+             <th>Description</th>
+             <th>Price</th>
+             <th>Status</th>
+             <th>Image</th>
+             <th>Actions</th>
+          </tr>
+       </thead>
+       <tbody>
+         {% for category in categories %}
+           <tr>
+             <td colspan="7"><strong>{{ category.name }}</strong></td>
+           </tr>
+           {% for container in category.space.all %}
+              <tr>
+                 <td></td>
+                 <td>{{ container.name }}</td>
+                 <td>{{ container.description }}</td>
+                 <td>${{ container.price }}</td>
+                 <td>{{ container.status }}</td>
+                 <td>
+                   <img src="{{ container.image.url }}" alt="{{ container.name }}" width="100" height="100">
+                 </td>
+                 <td>
+                   <a href="{% url 'update_container' container.id %}">Edit</a>
+                   <a href="{% url 'delete_container' container.id %}">Delete</a>
+                 </td>
+               </tr>
+           {% endfor %}
+         {% endfor %}
+       </tbody>
+    </form>  
+  </table>
+
+  <a href="{% url 'add_container' %}">Add Container</a>
+{% endblock %}
+ 

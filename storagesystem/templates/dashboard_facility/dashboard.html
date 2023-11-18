@@ -1,0 +1,170 @@
+{% extends 'mainfiles/base.html' %}
+
+{% block content %}
+    <div class="container">
+        <div class="row justify-content-center mt-3">
+            <div class="card col-md-5 mr-3">
+                <h4 class="text-center pt-2">Today's Total Revenue</h4>
+                <h1 class="text-center" style="color: green;">ksh{{ total_revenue }}</h1>
+            </div>
+
+            <div class="card col-md-5 mr-3">
+                <h4 class="text-center pt-2">Today's Total Bookings</h4>
+                <h1 class="text-center" style="color: #ad0003;">{{ total_bookings }}</h1>
+            </div>
+        </div>
+        
+
+
+        <div class="card card-body ">
+            <a class="btn btn-primary btn-sm btn-block" href="{% url 'add_container' %}">Add Container</a>
+            <table class="table table-hover table-striped">
+               
+                   <thead>
+                       <tr>
+                         
+                         <th>Name</th>
+                         <th>Status</th>
+                         <th>view</th>
+                         <th>Update</th>
+                         <th>Delete</th>
+                       </tr>
+                   </thead>
+                   <tbody>
+                      {% for container in containers %}
+                               <tr>
+                                  
+                                  <td>{{ container.name }}</td> 
+                                  
+                                  <td>{{ container.status }}</td>
+                                  <td>
+                                    <a class="btn btn-sm btn-info" href="{% url 'view_container' container.id %}">View</a> <!-- Link to view_container view -->
+                                  </td>
+                                  <td>
+                                     <a class="btn btn-sm btn-info" href="{% url 'update_container' container.id %}">update</a>
+                                  </td>
+                                  <td> 
+                                     <a class="btn btn-sm btn-danger" href="{% url 'delete_container' container.id %}">Delete</a>
+                                  </td>
+                               </tr>
+                      {% endfor %}
+                    </tbody>
+                    
+            </table>
+        </div>
+
+
+        <div class="row justify-content-center">
+            <h3>DAILY BOOKINGS</h3>
+            <a class="btn btn-primary btn-sm btn-block" href="{% url 'add_booking' %}">Make bookings</a>
+            <div class="card card-body ">
+                <table class="table table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Booking_id</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">View</th>
+                            <th scope="col">collection?</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Is Paid?</th>
+                            <th scope="col">Update</th>
+                            <th scope="col">Delete</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for booking in bookings %}
+                        <tr>
+                            <th scope="row">{{ booking.pk }}</th>
+                            
+                            <td>{{ booking.name }}</td>
+                            <td>
+                                <a class="btn btn-sm btn-info" href="{% url 'view_booking' booking.id %}">View</a> <!-- Link to view_container view -->
+                            </td>
+                            <td>
+                                {% if booking.transportation_choice %}
+                                <p>Yes</p>
+                                
+                                {% else %}
+                                <p>No</p>
+                                
+                                {% endif %}
+
+                            </td>
+                            
+                            <td>{{ booking.price }}</td>
+                            <td>
+                                {% if booking.is_paid %}
+                                <i style="color: green;" class="fas fa-check"></i>
+                                {% else %}
+                                <i style="color: red;" class="fas fa-times"></i>
+                                {% endif %}
+
+                            </td>
+                            <td><a class="btn btn-sm btn-info" href="{% url 'update_booking' booking.id %}">update</a> </td>
+                            <td><a class="btn btn-sm btn-info" href="{% url 'delete_booking' booking.id %}">Delete</a> </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="row justify-content-center">
+            <h3>ALL PREVIOUS BOOKINGS</h3>
+            
+            <div class="card card-body ">
+                <table class="table table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Booking_id</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">View</th>
+                            <th scope="col">collection?</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Is Paid?</th>
+                            <th scope="col">Update</th>
+                            <th scope="col">Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for booking in all_bookings %}
+                        <tr>
+                            <th scope="row">{{ booking.pk }}</th>
+                            
+                            <td>{{ booking.name }}</td>
+                            <td>
+                                <a class="btn btn-sm btn-info" href="{% url 'view_booking' booking.id %}">View</a> <!-- Link to view_container view -->
+                            </td>
+                            <td>
+                                {% if booking.transportation_choice %}
+                                <p>Yes</p>
+                                
+                                {% else %}
+                                <p>No</p>
+                                
+                                {% endif %}
+
+                            </td>
+                            
+                            <td>{{ booking.price }}</td>
+                            <td>
+                                {% if booking.is_paid %}
+                                <i style="color: green;" class="fas fa-check"></i>
+                                {% else %}
+                                <i style="color: red;" class="fas fa-times"></i>
+                                {% endif %}
+
+                            </td>
+                            <td><a class="btn btn-sm btn-info" href="{% url 'update_booking' booking.id %}">update</a> </td>
+                            <td><a class="btn btn-sm btn-info" href="{% url 'delete_booking' booking.id %}">Delete</a> </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+        
+    </div>
+{% endblock content %}

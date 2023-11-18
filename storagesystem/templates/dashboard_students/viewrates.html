@@ -1,0 +1,58 @@
+{% extends 'mainfiles/base.html' %}
+{% block content %}
+
+{% if selected_subcounty %}
+    {% if rates %}
+        <h2>Rates for {{ selected_subcounty }}:</h2>
+        <ul>
+            {% for key, value in rates.items %}
+                <li>
+                    <input type="radio" id="{{ key }}" name="selected_rate" value="{{ key }}" {% if selected_rate == key %}checked{% endif %}>
+                    <label for="{{ key }}">{{ key }}: {{ value }}</label>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No rates found for {{ selected_subcounty }}</p>
+    {% endif %}
+{% endif %}
+
+
+    <h2>Rates for {{ subcounty }}</h2>
+    <form id="bookingForm" method="post" action="">
+        {% csrf_token %}
+        <input type="hidden" name="subcounty" value="{{ subcounty }}">
+        
+        <table>
+            <tr>
+                <th>Vehicle Type</th>
+                <th>Rate</th>
+                <th>Select Rate</th>
+            </tr>
+            {% for vehicle_type, rate in rates.items %}
+                <tr>
+                    <td>{{ vehicle_type }}</td>
+                    <td>{{ rate }}</td>
+                    <td>
+                        <label>
+                            <input type="radio" name="selected_rate" value="{{ rate }}"> Select
+                        </label>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+       
+        
+       <input type="submit" value="submit"> 
+    </form>
+
+    <script>
+        document.getElementById('bookingForm').addEventListener('submit', function(event) {
+            var selectedRate = document.querySelector('input[name="selected_rate"]:checked');
+            if (!selectedRate) {
+                alert('Please select a rate before booking.');
+                event.preventDefault();  // Prevent form submission if no rate is selected
+            }
+        });
+    </script> 
+{% endblock content %}

@@ -1,0 +1,36 @@
+{% extends 'mainfiles/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+  {% for message in messages %}
+  <div class="message text-center alert alert-info {{message.tags}}">
+    {{ message }}
+  </div>
+  {%endfor%}
+ <div class="Container"> <!--style="margin-top: 30px">  -->
+    <div class="form-signup">
+      <form action="" method="POST">
+        {% csrf_token %}
+        <h3 class="has-text-centered mb-5 is-size-3">SignIn</h3>
+        
+          <!-- {{ form.as_p }}-->
+            {{ form|crispy }}
+        
+        <div class="form-group" id="signup-button">
+            <button type="submit">Sign In</button>
+        </div>
+        <div class="form-group">
+          <small class="text-muted ml-3" >Don't have an account yet? <a href="{% url 'signup' %}">Sign Up</a></small> 
+          <br/>
+          <small class ="text-muted ml-3"><a href="{% url 'reset_password' %}">forgot password?</a></small>
+        </div>
+      </form>
+    </div>
+ </div>
+
+ 
+{% endblock %}
+
+
+
