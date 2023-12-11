@@ -2,350 +2,182 @@
 {% load static %}
 {% block content %}
 
-<div class="container mb-5">
+     
+     {% for message in messages %}
+         <div class="message text-center alert alert-info {{message.tags}}">
+             {{ message }}
+         </div>
+     {% endfor %}
+
+  <div class="container mt-5 mb-5">
+      <div class="row">
+          {% for shared in shared_spaces %}
+          <div class="col-lg-4 mb-4">
+              <div class="card mx-auto" style="width: 300px;">
+                <form method="POST" action="{% url 'book_spaces' %}" id="sharedSpacesForm">
+                  {% csrf_token %}
+                  <div class="image-container" id="image-container-{{ shared.pk }}" onclick="expandImage('image-container-{{ shared.pk }}', '{{ shared.image.url }}')">
+                    <img class="rounded" src="{{ shared.image.url }}" width="300" height="200" />
+                  </div>
+                  <div class="form-group form-check my-3">
+                    <label class="form-check-label"><strong>{{ shared.name }}</strong></label>
+                    <input type="checkbox" id="space-checkbox-{{ shared.pk }}" name="spaces[]" class="form-check-input" value="{{ shared.pk }}">
+                  </div>
+                  <hr>
+                  <div class="d-flex justify-content-between align-items-center p-3">
+                      <a class="btn btn-outline-success" href="{% url 'viewcontainer' shared.pk %}">View</a>
+                      <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#bookingModal-{{ shared.pk }}" onclick="selectCheckbox('space-checkbox-{{ shared.pk }}')">Book</button>
+                      <p class="font-weight-bold pl-5" style="float: right"><strong>ksh:{{ shared.price }}pm</strong></p>
+                  </div>
+
+                  <div class="modal fade" id="bookingModal-{{ shared.pk }}" tabindex="-1" aria-labelledby="bookingModalLabel-{{ shared.pk }}" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="bookingModalLabel-{{ shared.pk }}">Book {{ shared.name }}</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          <form method="POST" action="{% url 'book_spaces' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="selected_space" value="{{ shared.pk }}">
+                            <div id="user-info-{{ shared.pk }}">
+                              <div class="form-field">
+                                <label for="name">Name:</label>
+                                <input required class="form-control" type="text" name="name" placeholder="Name..">
+                              </div>
+                              <div class="form-field">
+                                <label for="email">Email:</label>
+                                <input required class="form-control" type="email" name="email" placeholder="Email..">
+                              </div>
+                              
+                              <div class="form-field">
+                                <label for="phonenumber">Phonenumber:</label>
+                                <input required class="form-control" type="tel" name="phonenumber" placeholder="254.." >
+                              </div>
+                              <div>
+                                  <p>Select the booking period:</p>
+                                <label for="start_date">Start Date:</label>
+                                <input type="date" id="start_date" name="start_date" required >
+      
+                                <label for="end_date">End Date:</label>
+                                <input type="date" id="end_date" name="end_date" required >
+                              </div>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary">Submit Details</button>
+                            
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                </form>
+              </div>
+          </div>
+          {% endfor %}
+      </div>
+  </div>
+
+  <div class="container mb-5">
     <div class="row">
-        <form method="POST" action="{% url 'book_spaces' %}" id="sharedSpacesForm">
-          {% csrf_token %}
-<!--data-bs-toggle="modal" data-bs-target="#submitModal"-->
-            <div class="row">
-                {% for shared in shared_spaces %}
-                <div class="col-lg-4 mb-4">
-                    <div class="image-container" id="image-container-{{ shared.pk }}" onclick="expandImage('image-container-{{ shared.pk }}', '{{ shared.image.url }}')">
-                        <!--<div class="image-container" id="image-container-{{ shared.pk }">-->
-                        <img class="rounded" src="{{ shared.image.url }}" width="150" height="100" />
-                   </div> 
-                   <div class="form-group form-check">
-                    <!-- <h6><strong>{{ shared.name }}</strong></h6> -->
-                     <label class="form-check-label"><strong>{{ shared.name }}</strong></label>
-                     <input type="checkbox" id="space-checkbox-{{ shared.pk }}" name="spaces[]" class="form-check-input" value="{{ shared.pk }}">
-                   </div>
-                   <hr> 
-                   <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#bookingModal-{{ shared.pk }}" onclick="selectCheckbox('space-checkbox-{{ shared.pk }}')">
-                       Book
-                   </button>
-                   <a class="btn btn-outline-success" href="{% url 'viewcontainer' shared.pk %}">View</a>
-                   <p class="font-weight-bold pl-5" style="float: right"><strong>ksh:{{ shared.price }}</strong></p>
-                            
+        {% for private in private_spaces %}
+        <div class="col-lg-4 mb-4">
+            <div class="card mx-auto" style="width: 300px;">
+              <form method="POST" action="{% url 'book_spaces' %}" id="privateSpacesForm">
+                {% csrf_token %}
+                <div class="image-container" id="image-container-{{ private.pk }}" onclick="expandImage('image-container-{{ private.pk }}', '{{ private.image.url }}')">
+                  <img class="rounded" src="{{ private.image.url }}" width="300" height="200" />
                 </div>
-                        
+                <div class="form-group form-check my-3">
+                  <label class="form-check-label"><strong>{{ private.name }}</strong></label>
+                  <input type="checkbox" id="space-checkbox-{{ private.pk }}" name="spaces[]" class="form-check-input" value="{{ private.pk }}">
+                </div>
+                <hr>
+                <div class="d-flex justify-content-between align-items-center p-3">
+                    <a class="btn btn-outline-success" href="{% url 'viewcontainer' private.pk %}">View</a>
+                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#bookingModal-{{ private.pk }}" onclick="selectCheckbox('space-checkbox-{{ private.pk }}')">Book</button>
+                    <p class="font-weight-bold pl-5" style="float: right"><strong>ksh:{{ private.price }}pm</strong></p>
+                </div>
 
-                           <div class="modal fade" id="bookingModal-{{ shared.pk }}" tabindex="-1" aria-labelledby="bookingModalLabel" aria-hidden="true">
-                             <div class="modal-dialog">
-                                 <div class="modal-content">
-                                       <div class="modal-header">
-                                          <h5 class="modal-title" id="bookingModalLabel">Book {{ shared.name }}</h5>
-                                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                       </div>
-                                       <div class="modal-body">
-                                           <form method="POST" action="{% url 'book_spaces' %}"> 
-                                            {% csrf_token %} 
-                                               <div id="user-info">
-                                                   <div class="form-field">
-                                                       <label for="name">name:</label>
-                                                       <input required class="form-control" type="text" name="name" placeholder="Name..">
-                                                   </div>
-                                                   <br/>
-            
-                                                   <div class="form-field">
-                                                       <label for="email">Email:</label>
-                                                       <input required class="form-control" type="email" name="email"  placeholder="..@gmail.com">
-                                                   </div>
-                                                   <br/>
-            
-                                                   <div class="col-md-6 col-sm-12">
-                                                       <div class="form-field">
-                                                           <label for="name">phonenumber:</label>
-                                                           <input class="form-control" type="text" name="phonenumber" placeholder="+2547.">
-                                                       </div>
-                                                   </div>
-            
-                                                   <div>
-                                                       <p>Select the booking period:</p>
-                                                     <label for="start_date">Start Date:</label>
-                                                     <input type="date" id="start_date" name="start_date" required>
-            
-                                                     <label for="end_date">End Date:</label>
-                                                     <input type="date" id="end_date" name="end_date" required>
-                                                   </div>
-                 
-             
-                                                   <button type="submit" class="btn btn-primary"  > <!-- id="sharedSpacesSubmitBtn"-->
-                                                     submit details
-                                                   </button>   
-                                               </div>
-                                           </form>         
-                                       </div>
-                                    </div>
-                                </div>
+                <div class="modal fade" id="bookingModal-{{ private.pk }}" tabindex="-1" aria-labelledby="bookingModalLabel-{{ private.pk }}" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="bookingModalLabel-{{ private.pk }}">Book {{ private.name }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <form method="POST" action="{% url 'book_spaces' %}">
+                          {% csrf_token %}
+                          <input type="hidden" name="selected_space" value="{{ private.pk }}">
+                          <div id="user-info-{{ shared.pk }}">
+                            <div class="form-field">
+                              <label for="name">Name:</label>
+                              <input required class="form-control" type="text" name="name" placeholder="Name..">
+                            </div>
+                            <div class="form-field">
+                              <label for="email">Email:</label>
+                              <input required class="form-control" type="email" name="email" placeholder="Email..">
                             </div>
                             
-                        </div>
+                            <div class="form-field">
+                              <label for="phonenumber">Phonenumber:</label>
+                              <input required class="form-control" type="tel" name="phonenumber" placeholder="254." >
+                            </div>
+                            <div>
+                                <p>Select the booking period:</p>
+                              <label for="start_date">Start Date:</label>
+                              <input type="date" id="start_date" name="start_date" required >
+    
+                              <label for="end_date">End Date:</label>
+                              <input type="date" id="end_date" name="end_date" required >
+                            </div>
+                          </div>
+                          
+                          <button type="submit" class="btn btn-primary">Submit Details</button>
+                          
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 
-                {% endfor %}
-            </div>  
-            
-        </form>  
-        
-        <form method="POST" action="{% url 'book_spaces' %}" id="privateSpacesForm">
-            {% csrf_token %}
-            <div class="row">
-                {% for private in private_spaces %}
-                <div class="col-lg-4 mb-4">
-                    <div class="image-container" id="image-container-{{ private.pk }}" onclick="expandImage('image-container-{{ private.pk }}', '{{ private.image.url }}')">
-                        <!--<div class="image-container" id="image-container-{{ private.pk }">-->
-                        <img class="rounded" src="{{ private.image.url }}" width="150" height="100" />
-                   </div> 
-                   <div class="form-group form-check">
-                     <!-- <h6><strong>{{ private.name }}</strong></h6> -->
-                     <label class="form-check-label"><strong>{{ private.name }}</strong></label>
-                     <input type="checkbox" id="space-checkbox-{{ private.pk }}" name="spaces[]" class="form-check-input" value="{{ private.pk }}">
-                   </div>
-                   <hr> 
-                   <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#bookingModal-{{ private.pk }}" onclick="selectCheckbox('space-checkbox-{{ private.pk }}')">
-                       Book
-                   </button>
-                   <a class="btn btn-outline-success" href="{% url 'viewcontainer' private.pk %}">View</a>
-                   <p class="font-weight-bold pl-5" style="float: right"><strong>ksh:{{ private.price }}</strong></p>
-                            
-                </div>
-                        
-
-                           <div class="modal fade" id="bookingModal-{{ private.pk }}" tabindex="-1" aria-labelledby="bookingModalLabel" aria-hidden="true">
-                             <div class="modal-dialog">
-                                 <div class="modal-content">
-                                       <div class="modal-header">
-                                          <h5 class="modal-title" id="bookingModalLabel">Book {{ private.name }}</h5>
-                                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                       </div>
-                                       <div class="modal-body">
-                                           <form method="POST" action="{% url 'book_spaces' %}"> 
-                                            {% csrf_token %} 
-                                               <div id="user-info">
-                                                   <div class="form-field">
-                                                       <label for="name">name:</label>
-                                                       <input required class="form-control" type="text" name="name" placeholder="Name..">
-                                                   </div>
-                                                   <br/>
-            
-                                                   <div class="form-field">
-                                                       <label for="email">Email:</label>
-                                                       <input required class="form-control" type="email" name="email"  placeholder="..@gmail.com">
-                                                   </div>
-                                                   <br/>
-
-            
-                                                   <div class="col-md-6 col-sm-12">
-                                                       <div class="form-field">
-                                                           <label for="name">phonenumber:</label>
-                                                           <input class="form-control" type="text" name="phonenumber" placeholder="+2547.">
-                                                       </div>
-                                                   </div>
-            
-                                                   <div>
-                                                       <p>Select the booking period:</p>
-                                                     <label for="start_date">Start Date:</label>
-                                                     <input type="date" id="start_date" name="start_date" required>
-            
-                                                     <label for="end_date">End Date:</label>
-                                                     <input type="date" id="end_date" name="end_date" required>
-                                                   </div>
-                 
-            
-                                                   <button type="submit" class="btn btn-primary"  data-bs-toggle="modal" data-bs-target="#submitModal" ><!--id="privateSpacesSubmitBtn"-->
-                                                     submit details
-                                                   </button>   
-                                               </div>
-                                           </form>         
-                                       </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                        </div>
-            
-               {% endfor %} 
-            </div>
-        </form>    
-    </div>    
-</div>
-
-<!-- Add this at the end of your template -->
-<!--<div class="modal fade" id="bookingConfirmationModal" tabindex="-1" aria-labelledby="bookingConfirmationModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="bookingConfirmationModalLabel">Booking Confirmation</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="container mb-5">
-                    <div class="row justify-content-center mt-1">
-                        <div class="col-md-5 col-sm-12 p-4 text-center">
-                            <h1>Bookings submitted!</h1>
-                            <p>You should receive a confirmation email soon.</p>
-                            <a href="{% url 'index' %}">Go to the homepage</a>
-                        </div>
-                    </div>
-
-                    <div class="row justify-content-center mt-5">
-                        <div class="col-md-5 col-sm-12 text-center">
-                            <h3 class="pb-3">Booking Summary:</h3>
-                            {% for space in booked_spaces %}
-                                <p>{{ space.name }} <span class="pl-3">{{ space.price }}</span></p>
-                            {% endfor %}
-                            <p class="font-weight-bold pt-4">Total: {{ total_price }}</p>
-                        </div>
-                    </div>
-                </div>
+              </form>
             </div>
         </div>
+        {% endfor %}
     </div>
-</div>  -->
+</div>
 
 
-<!-- selects the checkbox when book button is clicked -->
   
 
 <script>
     function selectCheckbox(checkboxId) {
         // Function to select the checkbox when the "Book" button is clicked
         document.getElementById(checkboxId).checked = true;
+        //document.getElementById('myForm').submit();
     }
 </script>
-
- <!--<script>
-    document.getElementById('sharedSpacesSubmitBtn').addEventListener('click', function (event) {
-        //event.preventDefault();
-        $('#bookingConfirmationModal').modal('show');
-    });
-</script>  -->
-
-
-<!--<script>
-    function submitForm(formId) {
-        console.log('Form submitted!');
-        var form = document.getElementById(formId);
-        var formData = new FormData(form);
-
-        fetch(form.action, {
-             method: 'POST',
-            body: formData,
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.json();
-        })
-       .then(data => {
-          // Handle success
-          showBookingConfirmationModal();
-       })
-       .catch(error => {
-          console.error('Error submitting the form:', error);
-       });
-    }
-    document.getElementById('sharedSpacesSubmitBtn').addEventListener('click', function (event) {
-        //event.preventDefault();
-        $('#bookingConfirmationModal').modal('show');
-        submitForm('sharedSpacesForm'); 
-    });
-
-</script> -->
-<!--<script>  use this
-    function submitForm(formId) {
-      var form = document.getElementById(formId);
-      var formData = new FormData(form);
-
-      fetch(form.action, {
-          method: 'POST',
-          body: formData,
-       })
-      .then(response => {
-          if (!response.ok) {
-              throw new Error(`HTTP error! Status: ${response.status}`);
-           }
-          return response.json();
-       })
-       .then(data => {
-          // Handle success
-          // You can choose to handle the response data here if needed
-          // For example, you can check if the response indicates success before showing the modal
-          showBookingConfirmationModal();
-       })
-      .catch(error => {
-         console.error('Error submitting the form:', error);
-      });
-    }
-
-   function showBookingConfirmationModal() {
-      // Show the booking confirmation modal
-      $('#bookingConfirmationModal').modal('show');
-     }
-
-    document.getElementById('sharedSpacesSubmitBtn').addEventListener('click', function (event) {
-       //Prevent the default form submission
-       //event.preventDefault();
-
-       // Submit the form using the submitForm function
-       submitForm('sharedSpacesForm');
-   });
-</script>-->
-
-<!--<script>
-    document.getElementById('sharedSpacesSubmitBtn').addEventListener('click', function(event) {
-        event.preventDefault();
-
-        var form = document.getElementById('sharedSpacesForm');
-        var formData = new FormData(form);
-
-        fetch(form.action, {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            showBookingConfirmationModal();
-        })
-        .catch(error => {
-            console.error('Error submitting the form:', error);
-        });
-    });
-
-    document.getElementById('privateSpacesSubmitBtn').addEventListener('click', function(event) {
-        event.preventDefault();
-
-        var form = document.getElementById('privateSpacesForm');
-        var formData = new FormData(form);
-
-        fetch(form.action, {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            showBookingConfirmationModal();
-        })
-        .catch(error => {
-            console.error('Error submitting the form:', error);
-        });
-    });
-
-    function showBookingConfirmationModal() {
-        console.log("Showing modal");
-        $('#bookingConfirmationModal').modal('show');
-    }
-</script>-->
-
-
-
-
-<!--<script>
+<script>
     function showBookingConfirmationModal() {
         $('#bookingConfirmationModal').modal('show');
         $('#submitModal').modal('show');
     }
-</script>-->
+</script>
+
+<script>
+  function submitForm(checkboxId) {
+      // Check the checkbox associated with the clicked "View" button
+      document.getElementById(checkboxId).checked = true;
+
+      // Submit the form
+      document.getElementById('myForm').submit();
+  }
+</script>
+
 
 
 <!--<script src="{% static 'js/modal.js' %}"></script> -->

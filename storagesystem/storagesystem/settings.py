@@ -25,7 +25,9 @@ SECRET_KEY = 'django-insecure-a7%nbm0-=wnoc(_%e1qlg-=g31&%2(7zg#=ynhxxw-_bo=p$ud
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+#ALLOWED_HOSTS = ['yourdomain.com','localhost','a45c-197-232-90-116.ngrok-free.app']
+#ALLOWED_HOSTS = ['yourdomain.com', 'localhost','e7ae-197-232-90-116.ngrok-free.app']
+ALLOWED_HOSTS=[]
 
 AUTH_USER_MODEL='authentications.CustomUser'
 
@@ -41,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'crispy_forms',
     'crispy_bootstrap5',
+    'bootstrap4',
     'django_admin_logs',
     'django_filters',
     'rest_framework',
@@ -48,7 +51,12 @@ INSTALLED_APPS = [
     'authentications',
     'dashboard_students',
     'dashboard_facility',
+    'mpesa',
 ]
+
+
+
+
 #Allows a superuser to delete logs
 DJANGO_ADMIN_LOGS_DELETABLE = True
 #View the logs in admin page
@@ -89,27 +97,40 @@ TEMPLATES = [
 WSGI_APPLICATION = 'storagesystem.wsgi.application'
 
 
+
+
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-#DATABASES = {
- #   'default': {
- #       'ENGINE': 'django.db.backends.sqlite3',
- #       'NAME': BASE_DIR / 'db.sqlite3',
-  #  }
-#}
-
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'STORAGE',
-        'USER': 'postgres',
-        'PASSWORD': 'Akisa_001',
-        'HOST': 'localhost',
-        'PORT': '5432',
+   'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+       'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
+'''DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'Storage',
+        'USER': 'postgres',
+        'PASSWORD': 'Akisa_001',
+        'HOST': 'localhost',
+        'PORT': '5433',
+    }
+}'''
+
+'''DATABASES = {
+   'default': {
+       'ENGINE': 'django.db.backends.mysql',
+       'NAME' : 'Storage',
+       'USER': 'root',
+       'PASSWORD': '',
+       'HOST': 'localhost',
+       'PORT': '3306', 
+    
+    }
+}'''
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -154,12 +175,19 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 REST_FRAMEWORK = {
-    # Use Django's standard `django.contrib.auth` permissions,
-    # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticatedorReadOnly'
-    ]
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+        # Other permission classes...
+    ],
+    # Other Django REST Framework settings...
 }
+
+#used in going live
+#CSRF_TRUSTED_ORIGINS = ['https://d02c-197-232-90-116.ngrok-free.app']
+#CSRF_TRUSTED_ORIGINS = ['https://a45c-197-232-90-116.ngrok-free.app']
+
+
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -177,6 +205,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'storagefacilty617@gmail.com'
+#EMAIL_HOST_PASSWORD ='sqkhenasymhsmrzc'
 EMAIL_HOST_PASSWORD = 'nfnksilyqilujwpg'
 
 

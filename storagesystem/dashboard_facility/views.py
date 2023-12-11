@@ -3,13 +3,53 @@ from django.views import View
 #from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.utils.timezone import datetime,timedelta
 from dashboard_students.models import Booking,Container
+from django.db.models import Q
 from .forms import ContainerForm
 from dashboard_students.forms import BookingForm
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 
 
 # Create your views here.
+'''def search_results(request):
+    query = request.GET.get('query')
+    results = Booking.objects.filter(booking_number__icontains=query)  # Search in the 'title' field
+
+    return render(request, 'search_results.html', {'results': results, 'query': query})'''
+
+def search_results(request):
+    query = request.GET.get('query')
+    #results = Booking.objects.filter(booking_number__icontains=query) 
+
+    Booking_fields = ['name', 'price','rate','date_booked','email','school','start_date','end_date'] 
+    Container_fields = ['name','description','price','status']
+
+    Booking_queries = [Q(**{field + '__icontains': query}) for field in Booking_fields]
+    Container_queries = [Q(**{field + '__icontains': query}) for field in Container_fields]
+
+    Booking_q = Q()
+    for q in Booking_queries:
+        Booking_q |= q
+
+    Container_q = Q()
+    for q in Container_queries:
+        Container_q |= q
+
+    Booking_results = Booking.objects.filter(Booking_q)
+    Container_results = Container.objects.filter(Container_q)    
+
+
+
+    context ={
+         'Booking_results': Booking_results, 
+         'Container_results': Container_results,
+         'query': query
+    }
+
+    return render(request, 'dashboard_facility/dashboard.html',context)
+    #return render(request, 'dashboard_facility/search.html',context)
+
 @login_required(login_url='user_login')
 def Dashboard(request):
         
@@ -18,12 +58,24 @@ def Dashboard(request):
         #bookings made today
         bookings = Booking.objects.filter(
             date_booked__year=today.year, date_booked__month=today.month, date_booked__day=today.day)
+        paginator = Paginator(bookings, 5)    
+        page_number = request.GET.get('page')
+        bookings = paginator.get_page(page_number)
         
         # Total Bookings (all previous bookings)addedline
         all_bookings = Booking.objects.all()#filter(date_booked__lt=today)#lt means lessthan
+        paginator = Paginator(all_bookings, 5)    
+        page_number = request.GET.get('page')
+        all_bookings = paginator.get_page(page_number)
 
         # Retrieve all containers
         containers = Container.objects.all()
+        paginator = Paginator(containers, 2)    
+        page_number = request.GET.get('page')
+        containers = paginator.get_page(page_number)
+    
+
+      
 
         # loop through the orders and add the price value
         total_revenue = 0
@@ -33,34 +85,17 @@ def Dashboard(request):
         # pass total number of orders and total revenue into template
         context = {
             'bookings': bookings,
-            'all_bookings': all_bookings,#addedline
+            'all_bookings': all_bookings,
             'total_revenue': total_revenue,
             'total_bookings': len(bookings),
-            'containers':containers
+            'containers':containers,
+            'page_obj': containers,  #added during page adding
+            'allpage_obj':all_bookings, #added for pagination
+            'bookpage':bookings,
         }
 
         return render(request, 'dashboard_facility/dashboard.html', context)
 
-'''def search(request):
-    if 'q' in request.GET:
-        q = request.GET['q']
-        all_bookings = Booking.objects.filter(name__icontains=q)
-       # multiple_q = Q(Q(first_name__icontains=q) | Q(last_name__icontains=q))
-       # booking = Booking.objects.filter(multiple_q)
-    else:
-        all_bookings = Booking.objects.all()
-    context = {
-        'all_bookings': all_bookings
-    }
-    return render(request, 'dashboard_facility/dashboard.html', context)
- '''
-
-
-
-
-
-'''def test_func(self):
-        return self.request.user.groups.filter(name='storageProvider').exists()'''
 
 @login_required(login_url='user_login')
 def ViewContainer(request, pk):

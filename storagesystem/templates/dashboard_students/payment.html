@@ -1,0 +1,37 @@
+{% extends 'mainfiles/base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <form method="POST" action="{% url 'payment' booking_id %}">
+        {% csrf_token %}
+        <input type="hidden" name="amount" value="{{ amount }}">
+        <input type="hidden" name="phone_number" value="{{ phone }}">
+        <input type="submit" value="Initiate Payment">
+    </form>
+    <div>
+        <div class="container">
+            <h1>Your Booking was Successful!</h1>
+            <p>Thank you for booking with us.  We have sent you an email with your booking number. It will be used on picking your luggage.Here are the details of your booking:</p>
+            
+            <!-- Display booking details -->
+            <div class="booking-details">
+                <p><strong>Name:</strong> {{ booking.name }}</p>
+                <p><strong>Booking Period:</strong> {{ booking.start_date }} to {{ booking.end_date }}</p>
+                
+                <p><strong>Spaces Booked:</strong></p>
+                <ul>
+                    {% for space in booking.spaces.all %}
+                        <li>{{ space.name }}</li>
+                    {% endfor %}
+                </ul>
+                
+            </div>
+            
+            
+            
+            <p>For any further assistance, please contact our support team.</p>
+            
+        </div>
+
+    </div>
+</div>
+{%endblock%}

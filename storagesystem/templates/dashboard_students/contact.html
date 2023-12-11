@@ -1,0 +1,39 @@
+{% extends 'mainfiles/base.html' %}
+{% load static %}
+{% block content %}
+
+{% if name %}
+<p>Thanks {{name }}. We have received your email and we will respond shortly</p>
+{% endif %}
+<!--{% else %-->
+<div class="container mt-5"> 
+    <h5>Contact Us </h5>
+    <form method="POST" action="{% url 'contact' %}">
+    {% csrf_token %}
+      <div class="form-group"> 
+          <label for="name">Your name</label>
+          <input type="text" id='name'  name="name" placeholder="Name..">
+          <br><br>
+      
+          <label for="email"> Your email</label>
+          <input type="email" id="email" name="email" placeholder="Email..">
+          <br><br>
+      
+          <label for="message">message</label>
+          <textarea id="message" name="message" rows="4" cols="50" required placeholder="subject" ></textarea>
+          <br><br>
+
+        
+         <input type="submit" class="btn btn-outline-success" value="Submit">
+      </div> 
+    </form>  
+
+    <div>
+        <h5>Tudor</h5>
+        <p>Email us:storagefacility617@gmail.com</p>
+        <p>For booking telephone:0746003536</p>
+    </div>
+</div>
+<!--{% endif %-->
+
+{% endblock %}

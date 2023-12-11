@@ -27,6 +27,10 @@ urlpatterns = [
     path('',include("dashboard_facility.urls")),
     path('',include("mainfiles.urls")),
     path('api-auth/', include('rest_framework.urls')),
+    path("api/payments/", include("mpesa.api.urls")),
+    #path('api/payments/',include("dashboard_students.urls")),
+   # path("api/products/", include("products.api.urls")),
+
 
 ] + static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
 

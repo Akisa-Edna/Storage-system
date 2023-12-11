@@ -1,5 +1,10 @@
 {% extends 'mainfiles/base.html' %}
 {% block content %}
+{% for message in messages %}
+  <div class="message text-center alert alert-info {{message.tags}}">
+    {{ message }}
+  </div>
+  {%endfor%}
     <div class="container mb-5">
         <h2>Add Booking</h2>
         <form method="post" enctype="multipart/form-data">

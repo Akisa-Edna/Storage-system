@@ -1,6 +1,11 @@
 {%extends 'mainfiles/base.html'%} 
 {% load static %}
 {%block content%}
+{% for message in messages %}
+  <div class="message text-center alert alert-info {{message.tags}}">
+    {{ message }}
+  </div>
+  {%endfor%}
 <div class="container">
 <h1>SignUp from here</h1>
 

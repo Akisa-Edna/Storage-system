@@ -1,15 +1,65 @@
 {% extends 'mainfiles/base.html' %}
 
 {% block content %}
-    <div class="container mb-5">
-        <h1>Container Details</h1>
-        <p><strong>Name:</strong> {{ container.name }}</p>
-        <p><strong>Description:</strong> {{ container.description }}</p>
-        <p><strong>Price:</strong> ksh{{ container.price }}</p>
-        <p><strong>Units_available:</strong> {{ container.units }}</p>
-        <p><strong>Status:</strong> {{ container.status }}</p>
-        <p><strong>Category:</strong> {{ container.category }}</p>
-        <img src="{{ container.image.url }}" alt="{{ container.name }}" width="100" height="100">
+{% for message in messages %}
+<div class="message text-center alert alert-info {{message.tags}}">
+  {{ message }}
+</div>
+{%endfor%}
+
+
+
+ <div class="container mb-5 mt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="card-title text-center">Container Details</h5>
+          </div>
+          <div class="card-body">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Attribute</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Name</strong></td>
+                  <td>{{ container.name }}</td>
+                </tr>
+                <tr>
+                  <td><strong>Description</strong></td>
+                  <td>{{ container.description|linebreaksbr }}</td>
+                </tr>
+                <tr>
+                  <td><strong>Price</strong></td>
+                  <td>ksh{{ container.price }}</td>
+                </tr>
+                <tr>
+                  <td><strong>Units Available</strong></td>
+                  <td>{{ container.units }}</td>
+                </tr>
+                <tr>
+                  <td><strong>Status</strong></td>
+                  <td>{{ container.status }}</td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <img src="{{ container.image.url }}" alt="{{ container.name }}" width="100" height="100">
+                    </td>
+                </tr>
+              </tbody>
+            </table>
+            <a class="btn btn-secondary" href="{% url 'dashboard' %}">Back to Dashboard</a>
+           
+          </div>
+        </div>
+      </div>
     </div>
-    <a class="btn btn-secondary" href="{% url 'dashboard' %}">Back to Dashboard</a>
+  </div>
+
+
+
 {% endblock content %}

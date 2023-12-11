@@ -17,6 +17,7 @@ class CustomUser(AbstractUser):
     REQUIRED_FIELDS = ["username"]
 
     #is_admin = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(default=False)
     is_student = models.BooleanField(default=False)
     is_storageProvider = models.BooleanField(default=False)
 
@@ -47,8 +48,8 @@ class Profile(models.Model):
     def __str__(self):
         return f'{self.user.username} Profile' 
       
-    def save(self):
-        super().save() 
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs) 
 
         img = Image.open(self.image.path)
 

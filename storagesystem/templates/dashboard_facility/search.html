@@ -1,11 +1,28 @@
 {%extends 'mainfiles/base.html' %}
+{% block content %}
 
-<form method="GET">
+<!--<form method="GET" action="{% url 'search_results' %}">
+    <input type="text" name="query" placeholder="Search...">
+    <button type="submit">Search</button>
+</form> -->
+
+
+<!--<form method="GET">
     
     {{ form.as_p }}
     <input type="submit" value="Search">
-</form>
-
+</form> -->
+<h2>Search Results for "{{ query }}"</h2>
+<ul>
+    {% for result in results %}
+        <li>{{ result.booking_number }}</li>  <!-- Display relevant fields -->
+        <li>{{ result.name }}</li>
+        <li>{{ result.date_booked }}</li>
+        <li>{{ result.school }}</li>
+    {% empty %}
+        <li>No results found</li>
+    {% endfor %}
+</ul>
 <ul>
     {% for booking in results %}
         <li>{{ booking.name }}</li>
@@ -18,21 +35,6 @@
         <li>No results found.</li>
     {% endfor %}
 </ul>
-<!--
-< Template for Container search results 
-<form method="GET">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Search">
-</form>
 
-<ul>
-    {% for container in results %}
-        <li>{{ container.name }}</li>
-        <!-- Include other container fields as needed 
-    {% empty %}
-        <li>No results found.</li>
-    {% endfor %}
-</ul>
--->
 
+{% endblock %}

@@ -9,33 +9,39 @@
     </div>
     {% endfor %}
 
+
+    
+    <div class="row justify-content-center mt-1">
+      {% if user.is_authenticated %}
+        <h3>Hello {{ user.username }}</h3>
+        <h4>You have successfully logged in</h4>
+  
+      {% else %} 
+      <h5>create an account</h5>
+      <div>
+        <button type="button"> <a href="{% url 'signup' %}">SignUp</a></button>
+        <button type="button"> <a href="{% url 'user_login' %}">signIn</a></button>
+      </div>
+      
+      {% endif %}
+    </div>
+
     <div class="row justify-content-center mt-5">
       <div class="col-md-8 col-sm-12 offset-md-1 p-4 text-center">
          <h3>Welcome to storage facility</h3>
+         <div class="row justify-content-center mt-1">
+             <div class="card col-md-8 col-sm-12 p-4 text-center"> <!-- Increase the column size -->
+                <h4>View containers and make bookings</h4>
+                <a href="{% url 'container_book' %}" class="btn btn-outline-primary">Make Bookings!</a>
+             </div>
+         </div>
       </div>
     </div>
 
-    <!-- {% if user.is_authenticated %} -->
-    <div class="row justify-content-center mt-1">
-      <h3>Hello {{ user.username }}</h3>
-      <h4>You have successfully logged in</h4>
-
-        <div class="row justify-content-center mt-1">
-          <div class="card col-md-5 col-sm-12 offset-md-1 p-4 text-center">
-             <h4>View containers and make bookings</h4>
-             <a href="{% url 'container_book' %}" class="btn btn-outline-primary">make bookings!</a>
-          </div>
-        </div>
-  
-     <!-- <button type="submit"> <a href="/signout">signOut</a></button> -->
-     <!-- {% else %} -->
-      <button type="submit"> <a href="{% url 'signup' %}">SignUp</a></button>
-      <button type="submit"> <a href="{% url 'user_login' %}">signIn</a></button>
-     <!-- {% endif %} -->
-    </div>
+  </div>
 
   
-
-</div>    
+</div>
+   
 
 {% endblock %}

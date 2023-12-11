@@ -16,7 +16,7 @@ urlpatterns = [
      path('view_container/<int:pk>/', views.ViewContainer, name='view_container'),
      path('add_container/', views.AddContainer, name='add_container'),
 
-     #path('search/',views.search,name='search'),
+     path('search/',views.search_results,name='search_results'),
      #path('booking/search/', views.booking_search_view, name='booking_search_view'),
      #path('container/search/', views.container_search_view, name='container_search_view'),
 

@@ -9,3 +9,5 @@ class AuthenticationsConfig(AppConfig):
 #imports the signals.py file for creating profiles
     def ready(self):
         import authentications.signals   
+
+

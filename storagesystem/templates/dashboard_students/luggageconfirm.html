@@ -1,0 +1,73 @@
+{% extends 'mainfiles/base.html' %}
+{% block content %}
+{% for message in messages %}
+  <div class="message text-center alert alert-info {{message.tags}}">
+    {{ message }}
+  </div>
+{%endfor%}
+
+<div class="container" style="padding-top: 50px;">
+    <div class="row justify-content-center">
+       <div class="col-md-6">
+          <div class="card">
+              <div class="card-header">
+                 <h5 class="card-title text-center">Booking summary</h5>
+               </div>
+               <div class="card-body">
+                <table class="table table-bordered">
+                    <thead>
+                      <tr>
+                        <th>Details</th>
+                        <th>Value</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><strong>Name</strong></td>
+                        <td>{{ booking.name }}</td>
+                      </tr>
+                      {% for space in booking.spaces.all %}
+                      <tr>
+                        <td><strong>container booked</strong></td>
+                        <td>{{ space.name }}</td> 
+                      </tr>
+                      {%endfor%}
+                      <tr>
+                        <td><strong>period</strong></td>
+                        <td>{{ booking.start_date }} to  {{booking.end_date}}</td>
+                      </tr>
+                      <tr>
+                        <td><strong>school</strong></td>
+                        <td>{{ booking.school }}</td>
+                      </tr>
+                      <tr>
+                        <td><strong>collect luggage area</strong></td>
+                        <td>{{ booking.subcounty }}</td>
+                      </tr>
+                      <tr>
+                        <td><strong>collection price</strong></td>
+                        <td>{{ booking.rate }}</td>
+                      </tr>
+                      <tr>
+                        <td><strong>Total Price</strong></td>
+                        <td>ksh{{ booking.price }}</td>
+                      </tr>
+                     
+                    </tbody>
+                  </table>
+
+                 <p class="font-weight-bold pt-4">Total: {{booking.price}}</p>
+               </div>
+           </div>
+       </div> 
+    </div>
+</div>  
+<div class="container" style="margin-bottom: 80px;">
+    <form method="POST" action="{% url 'payment' booking_id %}">
+        {% csrf_token %}
+        <input type="hidden" name="amount" value="{{ amount }}">
+        <input type="hidden" name="phone_number" value="{{ phone }}">
+        <input type="submit" value="Make Payment">
+    </form>
+</div>
+{% endblock %}

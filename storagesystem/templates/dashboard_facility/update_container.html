@@ -1,10 +1,18 @@
 {% extends 'mainfiles/base.html' %}
+
+
 {% block content %}
+{% for message in messages %}
+  <div class="message text-center alert alert-info {{message.tags}}">
+    {{ message }}
+  </div>
+  {%endfor%}
     <div class="container mb-5">
         <h2>Update Container</h2>
         <form method="post">
             {% csrf_token %}
-            {{ form.as_p }}
+           
+            {{ form.as_p }} 
             
             <!-- Create a row for buttons -->
             <div class="row">
@@ -18,3 +26,6 @@
         </form>
     </div>
 {% endblock %}
+<!--{% load crispy_forms_tags %} -->
+ <!-- {{ form|crispy }}-->
+

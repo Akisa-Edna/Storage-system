@@ -1,6 +1,11 @@
 {% extends "mainfiles/base.html" %}
 
 {% block content %}
+{% for message in messages %}
+  <div class="message text-center alert alert-info {{message.tags}}">
+    {{ message }}
+  </div>
+  {%endfor%}
   <h1>containers</h1>
 
   <table>

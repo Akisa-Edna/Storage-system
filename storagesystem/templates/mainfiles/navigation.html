@@ -1,7 +1,10 @@
 {% load static %}
-<!--<nav class="navbar navbar-expand-lg bg-dark navbar-dark ">-->
-<nav class="navbar navbar-expand-lg  ">
-  <a class="navbar-brand" href="{% url 'index' %}">Homepage</a>
+<nav class="navbar navbar-expand-lg" style='background-color: rgb(209, 213, 216);'>
+<!-- <nav class="navbar navbar-expand-lg  "> -->
+  <div class="'container-fluid">
+    <a class="navbar-brand" href="{% url 'index' %}">Homepage</a>
+    
+  </div>
   
   <div class="container-fluid">
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -11,14 +14,18 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       
       <ul class="navbar-nav ms-auto">
+
         {% if user.is_authenticated %}
        
-        <li class="nav-item"><a href="" style="color:red">Welcome {{user.username}}</a></li>
+        <li class="nav-item"><a href="" style="color:red">Welcome {{user.username}}</a></li>  
         <li class="nav-item">
           <a class="nav-link " href="{%url 'profile' %}">Profile</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{%url 'about' %}">About Us</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{%url 'contact' %}">Contact Us</a>
         </li>
         
         <li class="nav-item">
@@ -29,11 +36,26 @@
           <a class="nav-link " href="{%url 'dashboard' %}">dashboard</a>
         </li>
         {% endif %}
+        {% if user.is_superuser %}
+        <li class="nav-item">
+          <a class="nav-link " href="{%url 'admin:index' %}">Admin</a>
+        </li>
+        {% endif %}
         <li class="nav-item">
           <a class="nav-link " href="{%url 'signout' %}">SignOut</a>
         </li>
 
         {% else %}
+        <li class="nav-item">
+          <a class="nav-link " href="{% url 'container_book' %}">make bookings!</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{%url 'about' %}">About Us</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="{%url 'contact' %}">Contact Us</a>
+        </li>
         
         <li class="nav-item">
           <a class="nav-link " href="{% url 'user_login' %}">SignIn</a>
@@ -46,12 +68,18 @@
         {% endif %}
 
       </ul>
-      <form class="form-inline my-2 my-lg-0">
+      {% if user.is_storageProvider or user.is_superuser %}
+      <form method="GET" action="{% url 'search_results' %}">
+        <input type="text" name="query" placeholder="Search...">
+        <button type="submit">Search</button>
+      </form>
+     {% endif %}
+     <!-- <form class="form-inline my-2 my-lg-0">
         <div>
           <input class="form-control mr-sm-2" name="q" type="search" placeholder="Search" aria-label="Search">
           <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
         </div>  
-      </form>
+      </form> -->
 
     </div>
   </div>

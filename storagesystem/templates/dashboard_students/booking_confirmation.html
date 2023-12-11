@@ -1,92 +1,77 @@
 {% extends 'mainfiles/base.html' %}
 {% block content %}
-<div class="container mb-5">
-    <div class="row justify-content-center mt-1">
-        <div class="col=md-5 col-sm-12 p-4 text-center">
-            <h1>Bookings submitted!</h1>
-            <p>You should receive a confirmation email soon.</p>
-            <a href="{% url 'index' %}">Go to the homepage</a>
-        </div>
+{% for message in messages %}
+  <div class="message text-center alert alert-info {{message.tags}}">
+    {{ message }}
+  </div>
+  {%endfor%}
+  
+<div class="container" style="padding-top: 50px;">
+    <div class="row justify-content-center">
+       <div class="col-md-6">
+          <div class="card">
+              <div class="card-header">
+                 <h5 class="card-title text-center">Booking summary</h5>
+               </div>
+                  <div class="card-body">
+                   <table class="table table-bordered">
+                       <thead>
+                         <tr>
+                           <th>Details</th>
+                           <th>Value</th>
+                         </tr>
+                       </thead>
+                       <tbody>
+                         <tr>
+                           <td><strong>Name</strong></td>
+                           <td>{{ booking.name }}</td>
+                         </tr>
+                         <tr>
+                            <td><strong>Booking period</strong></td>
+                            <td>{{booking.start_date}} to {{booking.end_date}}</td>
+                          </tr>
+                          {% for space in booking.spaces.all %}
+                          <tr>
+                            <td><strong>space</strong></td>
+                            <td>{{ space.name }}</td>
+                          </tr>
+                          {%endfor%}
+                          <tr>
+                            <td><strong>price</strong></td>
+                            <td>{{ booking.price }}</td>
+                          </tr>
+                       </tbody> 
+                    </table>   
+                
+
+                 <p class="font-weight-bold pt-4">Total: {{booking.price }}</p>
+
+                 <div class="col">
+                     <a class="btn btn-secondary" href="{% url 'luggage_collection' booking_id=booking_id %}">Need your luggage picked?</a> 
+                     <a class="btn btn-secondary" href="{% url 'container_book'  %}">Continue booking</a> 
+                 </div>
+               </div>
+           </div>
+       </div> 
     </div>
-
-    <div class="row justify-content-center mt-5">
-        <div class="col=md-5 col-sm-12 text-center">
-            <h3 class=pb-3> Booking Summary:</h3>
-            
-             
-               <p> Name: {{booking.name}}</p>
-               <p> email address: {{booking.email}} </p>
-               <p> Booking period: {{booking.start_date}} to {{booking.end_date}}</p>
-            
-
-            {% for space in spaces %}
-               <p> container name:{{ space.name }} <span class="pl-3">{{ space.price }}</span></p>
-            {% endfor %}
-
-            <p class="font-weight-bold pt-4">Total: {{ price }}</p>
-
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col">
-
-        </div>
-        
-        <div class="col">
-            <a class="btn btn-secondary" href="{% url 'luggage_collection' booking_id=booking_id %}">Need your luggage picked?</a>
-            <a class="btn btn-secondary" href="{% url 'book_spaces'  %}">Continue booking</a>
-            <a class="btn btn-secondary" href="#">payment</a>
-        </div>
-    </div>
+</div>      
+<div class="container">
+    <form method="POST" action="{% url 'payment' booking_id %}">
+        {% csrf_token %}
+        <input type="hidden" name="amount" value="{{ amount }}">
+        <input type="hidden" name="phone_number" value="{{ phone }}">
+        <input type="submit" value="Initiate Payment">
+    </form>
 </div>
 
+<!--<form method="POST" action="{% url 'payment' booking_id %}">
+    {% csrf_token %}
+    <input type="hidden" name="amount" value="{{ amount }}">
+    <input type="hidden" name="phone_number" value="{{ phone }}">
+    <input type="submit" value="Initiate Payment">
+</form> -->
 
 
 
-<div class="row">
-    <div class="col-lg-12">
-        <div class="box-element">
-
-            <a  class="btn btn-outline-dark" href="{% url 'container_book' %}">&#x2190; Continue Booking spaces</a>
-
-            <br>
-            <br>
-            <table class="table">
-                <tr>
-                   <!-- <th><h5>spaces: <strong>{{ total_spaces }}</strong></h5></th>  -->
-                    <th><h5>Total:<strong> {{price}}</strong></h5></th>
-                    <th>
-                        <a  style="float:right; margin:5px;" class="btn btn-success" href="#">Checkout</a>   
-                    </th>
-                </tr>
-            </table>
-
-        </div>
-
-        <br>
-        <div class="box-element">
-            <div class="cart-row">
-                <div style="flex:2"></div>
-                <div style="flex:2"><strong>container</strong></div>
-                <div style="flex:1"><strong>price</strong></div>
-                <div style="flex:1"><strong>Total</strong></div>
-            </div>
-            
-            {% for space in spaces %}
-            <div class="cart-row">
-                <div style="flex:2"><img class="row-image" src="{{space.image}}"></div>
-					<div style="flex:2"><p>{{space.name}}</p></div>
-					<div style="flex:1"><p>{{space.price}}</p></div>
-					
-					<div style="flex:1"><p>{{price}}</p></div>
-				</div>
-            </div> 
-            {% endfor %}  
-        </div>     
-    </div>
-</div> 
 {% endblock %}
 
-<!--<a class="btn btn-secondary" href="{% url 'get_rates'  %}">Need your luggage picked?</a>-->
- <!-- <a class="btn btn-secondary" href="{% url 'luggage_collection' booking_id=booking_id %}">Need your luggage picked?</a> -->

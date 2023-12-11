@@ -3,6 +3,11 @@
 {% load static %}
 {% load crispy_forms_tags %}
 {% block content %}
+{% for message in messages %}
+  <div class="message text-center alert alert-info {{message.tags}}">
+    {{ message }}
+  </div>
+  {%endfor%}
    <div class="Container">
       <div class="form-signup">
             

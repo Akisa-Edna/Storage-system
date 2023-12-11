@@ -5,7 +5,6 @@ from django.contrib.auth.views import LoginView
 from django.contrib import messages
 from django.urls import reverse
 from .forms import StudentSignUpForm,storageProviderSignUpForm,LoginForm,UserUpdateForm,ProfileUpdateForm
-#from .forms import UserUpdateForm
 from django.core.mail import send_mail
 from django.conf import settings
 from .models import CustomUser,Student
@@ -40,7 +39,7 @@ class StudentSignUpView(CreateView):
         login(self.request, user)
         #sending email to user that just created an account
         subject = 'Welcome to storage facility'
-        message = 'We are glad you are here, you can make your bookings to store your luggage with us.'
+        message = 'Hello {user.first_name} We are glad you are here, you can make your bookings to store your luggage with us.Hopefully we will offer the best services to you.'
 
         send_mail(
             subject,
@@ -68,7 +67,7 @@ class storageProviderSignUpView(CreateView):
         login(self.request, user)
         #send email once account is created
         subject = 'Welcome to storage facility'
-        message = 'We are glad you are here, you can make your bookings to store your luggage with us.'
+        message = 'Hello {user.first_name}. We are glad you are here, may you provide the best services to our customers.'
 
         send_mail(
             subject,
@@ -80,7 +79,7 @@ class storageProviderSignUpView(CreateView):
 
         return redirect('user_login')
 
- #the staff_no code start   
+   
 def get_next_available_staff_number():
     try:
         staff_number = StaffNumber.objects.filter(is_in_use=False).first()
@@ -102,7 +101,7 @@ def release_staff_number_view(request, number):
     else:
         # Staff number not found or other error
         return redirect('error_page')  # Redirect to an error page
-  #staff number code end  
+   
 
 class Login(LoginView):
     form_class=LoginForm #addedline
@@ -147,28 +146,9 @@ def change_password(request):
 
 
 
-'''def profile(request, username):
-    if request.method == "POST":
-        user = request.user
-        form = UserUpdateForm(request.POST, request.FILES, instance=user)#request.files is for the user to add image
-        if form.is_valid():
-            user_form = form.save()
-            messages.success(request, f'{user_form.username, Your profile has been updated!')
-            return redirect("profile", user_form.username)
-
-        for error in list(form.errors.values()):
-            messages.error(request, error)
-
-    user = get_user_model().objects.filter(username=username).first()
-    if user:
-        form = UserUpdateForm(instance=user)
-        #form.fields['description'].widget.attrs = {'rows': 1}
-        return render(request,"authentications/profile.html",context={"form": form})
-    else:
-     return redirect("index")  '''
-
 def Profile(request):
     if request.method == 'POST':
+         
         u_form = UserUpdateForm(request.POST, instance=request.user)
         p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
 

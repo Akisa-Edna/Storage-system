@@ -1,7 +1,35 @@
 {% extends 'mainfiles/base.html' %}
 
 {% block content %}
-    <div class="container">
+{% for message in messages %}
+  <div class="message text-center alert alert-info {{message.tags}}">
+    {{ message }}
+  </div>
+  {%endfor%}
+    <div>
+        <h6>Search Results </h6> 
+
+      <!--  <h6>Booking Results</h6> -->
+        <ul>
+            {% for result in Booking_results %}
+              <li> {{ result.name }}-{{ result.spaces }} - {{ result.booking_number }} - {{ result.date_booked }} - {{ result.phonenumber }}</li> <!-- Replace with actual fields -->
+            {% empty %}
+             <!-- <li>No results found for booking</li> -->
+            {% endfor %}
+        </ul>
+
+      <!--  <h6>Container Results</h6> -->
+        <ul>
+            {% for result in Container_results %}
+              <li>{{ result.name }} - {{ result.price }} - {{ result.units }} - {{ result.status }}</li> <!-- Replace with actual fields -->
+            {% empty %}
+          <!--   <li>No results found for container</li> -->
+            {% endfor %}
+        </ul>
+    
+    </div>
+ 
+    <div class="container"  style="margin-bottom: 50px">
         <div class="row justify-content-center mt-3">
             <div class="card col-md-5 mr-3">
                 <h4 class="text-center pt-2">Today's Total Revenue</h4>
@@ -48,20 +76,36 @@
                                   </td>
                                </tr>
                       {% endfor %}
-                    </tbody>
-                    
+                    </tbody>      
             </table>
+            <div class="pagination">
+                {% if containers.has_previous %}
+                    <a href="?page=1" class="btn btn-primary">&laquo; First</a>
+                    <a href="?page={{ containers.previous_page_number }}" class="btn btn-primary">&lsaquo; Previous</a>
+                {% endif %}
+        
+                <span class="current">Page {{ containers.number }} of {{ containers.paginator.num_pages }}</span>
+        
+                {% if containers.has_next %}
+                    <a href="?page={{ containers.next_page_number }}" class="btn btn-primary">Next &rsaquo;</a>
+                    <a href="?page={{ containers.paginator.num_pages }}" class="btn btn-primary">Last &raquo;</a>
+                {% endif %}
+            </div>
         </div>
+        <br><br>
 
 
         <div class="row justify-content-center">
-            <h3>DAILY BOOKINGS</h3>
-            <a class="btn btn-primary btn-sm btn-block" href="{% url 'add_booking' %}">Make bookings</a>
+          <!-- <h3>DAILY BOOKINGS</h3>
+            <a class="btn btn-primary btn-sm btn-block" href="{% url 'add_booking' %}">Make bookings</a> -->
             <div class="card card-body ">
+                <h3>DAILY BOOKINGS</h3>
+                <a class="btn btn-primary btn-sm btn-block" href="{% url 'add_booking' %}">Make bookings</a>
                 <table class="table table-hover table-striped">
                     <thead>
                         <tr>
-                            <th scope="col">Booking_id</th>
+                            <th scope="col">Id</th>
+                            <th scope="col">Book_no</th>
                             <th scope="col">Name</th>
                             <th scope="col">View</th>
                             <th scope="col">collection?</th>
@@ -76,13 +120,14 @@
                         {% for booking in bookings %}
                         <tr>
                             <th scope="row">{{ booking.pk }}</th>
-                            
+                            <td>{{ booking.booking_number }}</td>
                             <td>{{ booking.name }}</td>
                             <td>
                                 <a class="btn btn-sm btn-info" href="{% url 'view_booking' booking.id %}">View</a> <!-- Link to view_container view -->
                             </td>
+
                             <td>
-                                {% if booking.transportation_choice %}
+                                {% if booking.rate %}
                                 <p>Yes</p>
                                 
                                 {% else %}
@@ -107,17 +152,35 @@
                         {% endfor %}
                     </tbody>
                 </table>
+                <div class="pagination">
+                    {% if bookings.has_previous %}
+                        <a href="?page=1" class="btn btn-primary">&laquo; First</a>
+                        <a href="?page={{ bookings.previous_page_number }}" class="btn btn-primary">&lsaquo; Previous</a>
+                    {% endif %}
+                    <br>
+            
+                    <span class="current">Page {{ bookings.number }} of {{ bookings.paginator.num_pages }}</span>
+            
+                    {% if bookings.has_next %}
+                        <a href="?page={{ bookings.next_page_number }}" class="btn btn-primary">Next &rsaquo;</a>
+                        <a href="?page={{ bookings.paginator.num_pages }}" class="btn btn-primary">Last &raquo;</a>
+                    {% endif %}
+                </div>
             </div>
         </div>
+        <br><br>
         
-        <div class="row justify-content-center">
-            <h3>ALL PREVIOUS BOOKINGS</h3>
+        <div class="row justify-content-center" >
+         <!--   <h3>ALL PREVIOUS BOOKINGS</h3>-->
             
             <div class="card card-body ">
+                <h3>ALL PREVIOUS BOOKINGS</h3>
                 <table class="table table-hover table-striped">
                     <thead>
                         <tr>
-                            <th scope="col">Booking_id</th>
+                            <th scope="col">date</th>
+                            <th scope="col">Id</th>
+                            <th scope="col">Book_no</th>
                             <th scope="col">Name</th>
                             <th scope="col">View</th>
                             <th scope="col">collection?</th>
@@ -130,14 +193,16 @@
                     <tbody>
                         {% for booking in all_bookings %}
                         <tr>
+                            <td>{{ booking.date_booked }}</td>
                             <th scope="row">{{ booking.pk }}</th>
-                            
+
+                            <td>{{ booking.booking_number }}</td>
                             <td>{{ booking.name }}</td>
                             <td>
                                 <a class="btn btn-sm btn-info" href="{% url 'view_booking' booking.id %}">View</a> <!-- Link to view_container view -->
                             </td>
                             <td>
-                                {% if booking.transportation_choice %}
+                                {% if booking.rate %}
                                 <p>Yes</p>
                                 
                                 {% else %}
@@ -146,6 +211,16 @@
                                 {% endif %}
 
                             </td>
+                    <!--        <td>
+                                {% if booking.transportation_choice %}
+                                <p>Yes</p>
+                                
+                                {% else %}
+                                <p>No</p>
+                                
+                                {% endif %}
+
+                            </td>  -->
                             
                             <td>{{ booking.price }}</td>
                             <td>
@@ -163,6 +238,19 @@
                     </tbody>
 
                 </table>
+            </div>
+            <div class="pagination">
+                {% if all_bookings.has_previous %}
+                    <a href="?page=1" class="btn btn-primary">&laquo; First</a>
+                    <a href="?page={{ all_bookings.previous_page_number }}" class="btn btn-primary">&lsaquo; Previous</a>
+                {% endif %}
+        
+                <span class="current">Page {{ all_bookings.number }} of {{ all_bookings.paginator.num_pages }}</span>
+        
+                {% if all_bookings.has_next %}
+                    <a href="?page={{ all_bookings.next_page_number }}" class="btn btn-primary">Next &rsaquo;</a>
+                    <a href="?page={{ all_bookings.paginator.num_pages }}" class="btn btn-primary">Last &raquo;</a>
+                {% endif %}
             </div>
         </div>
         

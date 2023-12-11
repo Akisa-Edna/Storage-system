@@ -1,0 +1,13 @@
+{% extends 'mainfiles/base.html' %}
+{% block content %}
+
+<h2>Search Results for "{{ query }}"</h2>
+<ul>
+    {% for result in results %}
+        <li>{{ result.booking_number }}</li>  <!-- Display relevant fields -->
+        <li>{{ result.name }}</li>
+    {% empty %}
+        <li>No results found</li>
+    {% endfor %}
+</ul>
+{% endblock %}
